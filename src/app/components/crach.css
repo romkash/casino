@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto; /* Добавлен скролл страницы */
+}
+
+.space-crash-container {
+    width: 60%; /* Уменьшен размер игры */
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+.return-button {
+    align-self: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 65, 108, 0.5);
+}
+
+.return-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 65, 108, 0.7);
+}
+
+.game-controls {
+    background: rgba(17, 25, 40, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.game-field {
+    position: relative;
+    height: 250px; /* Уменьшен размер */
+    background: linear-gradient(to top, #0a1931, #27496d);
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.astronaut {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem; /* Уменьшен размер ракеты */
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.button {
+    background: linear-gradient(90deg, #36d1dc, #5b86e5);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 10px rgba(91, 134, 229, 0.4);
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(91, 134, 229, 0.6);
+}
+
+.rocket-trail {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateX(-50%);
+}

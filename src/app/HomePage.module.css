@@ -1,0 +1,381 @@
+.container {
+  min-height: 100vh;
+  background: #1a0d0d;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Навигация */
+.nav {
+  background: linear-gradient(to right, #2c1212, #1a0d0d);
+  padding: 1rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navContent {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.logoImage {
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.logoImage:hover {
+  transform: scale(1.05);
+}
+
+.logoTextContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoMainText {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #ffd700, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logoSubText {
+  font-size: 0.9rem;
+  color: #888;
+  letter-spacing: 1px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.navLink {
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.navLink:hover {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.vipLink {
+  background: linear-gradient(to right, #ffd700, #ff6b6b);
+  color: #1a0d0d;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: transform 0.3s;
+}
+
+.vipLink:hover {
+  transform: scale(1.05);
+}
+
+/* Основной контент */
+.mainContent {
+  flex: 1;
+  padding: 3rem 0;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Герой-секция */
+.heroSection {
+  position: relative;
+  margin-bottom: 4rem;
+  padding: 4rem 0;
+  background: linear-gradient(45deg, rgba(26,13,13,0.9), rgba(44,18,18,0.9)),
+              url('/pattern.png');
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.heroTitle {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.heroTitleGlow {
+  display: block;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.heroTitleAccent {
+  color: #ffd700;
+  display: block;
+  position: relative;
+}
+
+.heroStats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3rem;
+}
+
+.statItem {
+  text-align: center;
+  padding: 1.5rem 3rem;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 1.1rem;
+  color: #aaa;
+}
+
+/* Секция с играми */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  color: #ffd700;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.sectionTitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 80%;
+  background: #ff6b6b;
+  border-radius: 4px;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterButtons button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.filterButtons button:hover {
+  background: #ffd700;
+  color: #1a0d0d;
+}
+
+.filterActive {
+  background: #ffd700 !important;
+  color: #1a0d0d !important;
+  font-weight: 600;
+}
+
+/* Карточки игр */
+.gamesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  padding: 0 2rem;
+}
+
+.gameCard {
+  background: #1f1010;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.gameCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 240px;
+}
+
+.gameImage {
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.gameCard:hover .gameImage {
+  transform: scale(1.05);
+}
+
+.gameOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameCard:hover .gameOverlay {
+  opacity: 1;
+}
+
+.playButton {
+  background: #ffd700;
+  color: #1a0d0d;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.3s;
+}
+
+.playButton:hover {
+  transform: scale(1.05);
+}
+
+.playIcon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.cardContent {
+  padding: 1.5rem;
+}
+
+.gameInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  color: #888;
+}
+
+.rating {
+  color: #ffd700;
+}
+
+.playersOnline {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Футер */
+.footer {
+  background: #0d0606;
+  margin-top: auto;
+  padding: 4rem 0 2rem;
+}
+
+.footerColumns {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.footerColumn h4 {
+  font-size: 1.3rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+}
+
+.footerList {
+  list-style: none;
+  padding: 0;
+}
+
+.footerList li {
+  margin-bottom: 0.8rem;
+}
+
+.footerList a {
+  color: #aaa;
+  transition: color 0.3s;
+}
+
+.footerList a:hover {
+  color: #ffd700;
+}
+
+.footerBottom {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+/* Адаптация для очень широких экранов */
+@media (min-width: 1600px) {
+  .gamesGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .heroTitle {
+    font-size: 5rem;
+  }
+  
+  .sectionTitle {
+    font-size: 3rem;
+  }
+}
+
+/* Анимации */
+@keyframes gradientPulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

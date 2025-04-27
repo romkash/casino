@@ -1,100 +1,278 @@
+'use client';
+
+import { useState, useEffect } from "react";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
+import Link from "next/link";
+import MinesGame from "./components/minesGame";
+import SpaceCrash from "./components/crash";
 import Image from "next/image";
+import styles from './HomePage.module.css';
 
-export default function Home() {
+export default function HomePage() {
+  const [showMines, setShowMines] = useState(false);
+  const [showSpaceCrash, setShowSpaceCrash] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const defaultImage = '/default.jpg';
+  const minesImage = '/mines.jpg';
+  const spaceCrashImage = '/space-crash.jpg';
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleGameClick = (gameId: number) => {
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    if (gameId === 1) setShowMines(true);
+    else if (gameId === 2) setShowSpaceCrash(true);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const closeGames = () => {
+    setShowMines(false);
+    setShowSpaceCrash(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Ошибка выхода:", error);
+    }
+  };
+
+  // Остальной код компонента остается без изменений
+  // ... (как в вашем исходном коде)
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className={styles.container}>
+      {/* Модальное окно авторизации */}
+      {showAuthModal && (
+        <div className={styles.authModal}>
+          <div className={styles.modalContent}>
+            <h3>Требуется авторизация</h3>
+            <p>Для игры необходимо войти или зарегистрироваться</p>
+            <div className={styles.modalButtons}>
+              <Link href="/auth/login" className={styles.modalButton}>
+                Войти
+              </Link>
+              <Link href="/auth/register" className={styles.modalButton}>
+                Регистрация
+              </Link>
+              <button 
+                onClick={() => setShowAuthModal(false)}
+                className={styles.closeButton}
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
         </div>
+      )}
+
+      {/* Навигационная панель */}
+      <nav className={styles.nav}>
+        <div className={styles.navContent}>
+          <div className={styles.logoWrapper}>
+            <Image 
+              src="/logo.png" 
+              alt="Casino Logo" 
+              width={120} 
+              height={60}
+              className={styles.logoImage}
+            />
+            <div className={styles.logoTextContainer}>
+              <span className={styles.logoMainText}>PREMIUM CASINO</span>
+              <span className={styles.logoSubText}>Est. 2024</span>
+            </div>
+          </div>
+          
+          <div className={styles.navLinks}>
+            <Link href="/promotions" className={styles.navLink}>
+              Акции
+            </Link>
+            <Link href="/tournaments" className={styles.navLink}>
+              Турниры
+            </Link>
+            <Link href="/vip" className={styles.vipLink}>
+              VIP Клуб
+            </Link>
+          </div>
+
+          <div className={styles.authButtons}>
+            {isLoggedIn ? (
+              <button 
+                onClick={handleLogout}
+                className={styles.logoutButton}
+              >
+                Выйти
+              </button>
+            ) : (
+              <div className={styles.authLinks}>
+                <Link href="/auth/login" className={styles.authLink}>
+                  Вход
+                </Link>
+                <Link href="/auth/register" className={styles.registerLink}>
+                  Регистрация
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* Основной контент */}
+      <main className={styles.mainContent}>
+        {showMines || showSpaceCrash ? (
+          <div className={styles.activeGameContainer}>
+            <button 
+              onClick={closeGames}
+              className={styles.backButton}
+            >
+              ← К списку игр
+            </button>
+            {showMines && <MinesGame />}
+            {showSpaceCrash && <SpaceCrash />}
+          </div>
+        ) : (
+          <>
+            <section className={styles.heroSection}>
+              <div className={styles.heroContent}>
+                <h1 className={styles.heroTitle}>
+                  <span className={styles.heroTitleGlow}>Играйте</span>
+                  <span className={styles.heroTitleAccent}>в лучшие азартные игры</span>
+                </h1>
+                <div className={styles.heroStats}>
+                  <div className={styles.statItem}>
+                    <div className={styles.statValue}>$582K</div>
+                    <div className={styles.statLabel}>Выплачено за сутки</div>
+                  </div>
+                  <div className={styles.statItem}>
+                    <div className={styles.statValue}>24/7</div>
+                    <div className={styles.statLabel}>Поддержка</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className={styles.gamesSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Игровые автоматы</h2>
+                <div className={styles.filterButtons}>
+                  <button className={styles.filterActive}>Все игры</button>
+                  <button>Новые</button>
+                  <button>Популярные</button>
+                </div>
+              </div>
+              
+              <div className={styles.gamesGrid}>
+                {games.map((game) => (
+                  <div 
+                    key={game.id}
+                    className={`${styles.gameCard} ${!isLoggedIn ? styles.disabledCard : ''}`}
+                    onClick={() => handleGameClick(game.id)}
+                  >
+                    <div className={styles.gameCardInner}>
+                      <div className={styles.imageContainer}>
+                        <Image 
+                          src={game.image}
+                          alt={game.name}
+                          fill
+                          className={styles.gameImage}
+                          onError={(e) => {
+                            const img = e.target as HTMLImageElement;
+                            img.src = defaultImage;
+                          }}
+                          unoptimized
+                        />
+                        <div className={styles.gameOverlay}>
+                          <button className={styles.playButton}>
+                            Играть сейчас
+                            <svg className={styles.playIcon} viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.cardContent}>
+                        <h3>{game.name}</h3>
+                        <div className={styles.gameInfo}>
+                          <span className={styles.rating}>★ 4.9</span>
+                          <span className={styles.playersOnline}>🟢 124 онлайн</span>
+                        </div>
+                        {!isLoggedIn && (
+                          <div className={styles.lockOverlay}>
+                            <div className={styles.lockContent}>
+                              🔒 Требуется авторизация
+                              <div className={styles.lockButtons}>
+                                <Link href="/auth/login" className={styles.lockButton}>
+                                  Войти
+                                </Link>
+                                <Link href="/auth/register" className={styles.lockButtonAlt}>
+                                  Регистрация
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Футер */}
+      <footer className={styles.footer}>
+        <div className={styles.footerColumns}>
+          <div className={styles.footerColumn}>
+            <h4>О нас</h4>
+            <p>Лучшие азартные игры с 2010 года</p>
+            <div className={styles.socialLinks}>
+              <Link href="#"><span>📘 Facebook</span></Link>
+              <Link href="#"><span>📸 Instagram</span></Link>
+              <Link href="#"><span>💬 Telegram</span></Link>
+            </div>
+          </div>
+          <div className={styles.footerColumn}>
+            <h4>Игры</h4>
+            <ul className={styles.footerList}>
+              <li><Link href="#">Слоты</Link></li>
+              <li><Link href="#">Рулетка</Link></li>
+              <li><Link href="#">Блэкджек</Link></li>
+              <li><Link href="#">Покер</Link></li>
+            </ul>
+          </div>
+          <div className={styles.footerColumn}>
+            <h4>Поддержка</h4>
+            <ul className={styles.footerList}>
+              <li><Link href="#">Правила</Link></li>
+              <li><Link href="#">Безопасность</Link></li>
+              <li><Link href="#">Платежи</Link></li>
+              <li><Link href="#">Контакты</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.footerBottom}>
+          <p>© {new Date().getFullYear()} PREMIUM CASINO. Все права защищены.</p>
+          <div className={styles.legalLinks}>
+            <Link href="#">Политика конфиденциальности</Link>
+            <Link href="#">Условия использования</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );

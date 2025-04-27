@@ -1,0 +1,197 @@
+/* Основные стили для страницы */
+.mines-game-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #1a1a1a, #000000);
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Заголовок игры */
+  .game-title {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #ffd700, #ffa500);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 2rem;
+  }
+  
+  /* Контейнер для управления игрой */
+  .game-controls {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 2rem;
+  }
+  
+  /* Стили для кнопок */
+  .button {
+    background: linear-gradient(to right, #ffd700, #ffa500);
+    color: #000000;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+  }
+  
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  }
+  
+  .button:disabled {
+    background: #555555;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Стили для игрового поля */
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  .cell {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #333333, #222222);
+    border-radius: 0.5rem;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cell:hover {
+    background: linear-gradient(to bottom, #444444, #333333);
+    transform: scale(1.1);
+  }
+  
+  .cell.revealed {
+    background: linear-gradient(to bottom, #555555, #444444);
+    cursor: default;
+  }
+  
+  .cell.mine {
+    background: linear-gradient(to bottom, #ff4444, #cc0000);
+  }
+  
+  .cell.diamond {
+    background: linear-gradient(to bottom, #00cc00, #009900);
+  }
+  
+  /* Стили для информации о балансе и ставке */
+  .balance-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .balance-info div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    flex: 1;
+    margin: 0 0.5rem;
+  }
+  
+  .balance-info p {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  .balance-info .label {
+    font-size: 0.875rem;
+    color: #aaaaaa;
+  }
+  
+  /* Стили для множителя и выигрыша */
+  .multiplier-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .multiplier-info div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    flex: 1;
+    margin: 0 0.5rem;
+  }
+  
+  .multiplier-info p {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  .multiplier-info .label {
+    font-size: 0.875rem;
+    color: #aaaaaa;
+  }
+  
+  /* Стили для кнопок управления */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  /* Стили для настроек */
+  .settings {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .settings select {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    outline: none;
+  }
+  
+  .settings select:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Анимации */
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    }
+  }
+  
+  .glow-effect {
+    animation: glow 2s infinite;
+  }
