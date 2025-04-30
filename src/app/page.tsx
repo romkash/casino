@@ -9,16 +9,37 @@ import SpaceCrash from "./components/crash";
 import Image from "next/image";
 import styles from './HomePage.module.css';
 
+// Интерфейс для типа игры
+interface Game {
+  id: number;
+  name: string;
+  image: string;
+  comingSoon: boolean;
+}
+
 export default function HomePage() {
+  // Состояния
   const [showMines, setShowMines] = useState(false);
   const [showSpaceCrash, setShowSpaceCrash] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  // Пути к изображениям
   const defaultImage = '/default.jpg';
   const minesImage = '/mines.jpg';
   const spaceCrashImage = '/space-crash.jpg';
 
+  // Список игр с типизацией
+  const games: Game[] = [
+    { id: 1, name: 'Мины', image: minesImage, comingSoon: false },
+    { id: 2, name: 'Космический Краш', image: spaceCrashImage, comingSoon: false },
+    { id: 3, name: 'Рулетка', image: defaultImage, comingSoon: true },
+    { id: 4, name: 'Блэкджек', image: defaultImage, comingSoon: true },
+    { id: 5, name: 'Слоты', image: defaultImage, comingSoon: true },
+    { id: 6, name: 'Покер', image: defaultImage, comingSoon: true },
+  ];
+
+  // Отслеживание состояния аутентификации
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setIsLoggedIn(!!user);
@@ -26,6 +47,7 @@ export default function HomePage() {
     return () => unsubscribe();
   }, []);
 
+  // Обработчик клика по игре
   const handleGameClick = (gameId: number) => {
     if (!isLoggedIn) {
       setShowAuthModal(true);
@@ -38,11 +60,13 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Закрыть игры
   const closeGames = () => {
     setShowMines(false);
     setShowSpaceCrash(false);
   };
 
+  // Выход из системы
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -50,9 +74,6 @@ export default function HomePage() {
       console.error("Ошибка выхода:", error);
     }
   };
-
-  // Остальной код компонента остается без изменений
-  // ... (как в вашем исходном коде)
 
   return (
     <div className={styles.container}>
@@ -176,7 +197,7 @@ export default function HomePage() {
               </div>
               
               <div className={styles.gamesGrid}>
-                {games.map((game) => (
+                {games.map((game: Game) => (
                   <div 
                     key={game.id}
                     className={`${styles.gameCard} ${!isLoggedIn ? styles.disabledCard : ''}`}

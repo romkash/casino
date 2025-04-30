@@ -1,3 +1,4 @@
+/* Глобальный контейнер */
 .container {
   min-height: 100vh;
   background: #1a0d0d;
@@ -5,18 +6,29 @@
   display: flex;
   flex-direction: column;
   font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Скрытие горизонтального скролла и плавная прокрутка */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Навигация */
 .nav {
   background: linear-gradient(to right, #2c1212, #1a0d0d);
   padding: 1rem 0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   position: sticky;
   top: 0;
+  width: 100%;
   z-index: 1000;
 }
 
+/* Центровка и гибкость навбара */
 .navContent {
   max-width: 1440px;
   margin: 0 auto;
@@ -24,8 +36,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
+/* Адаптивные логотипы */
 .logoWrapper {
   display: flex;
   align-items: center;
@@ -34,7 +48,7 @@
 
 .logoImage {
   border-radius: 8px;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .logoImage:hover {
@@ -47,7 +61,7 @@
 }
 
 .logoMainText {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   background: linear-gradient(to right, #ffd700, #ff6b6b);
   -webkit-background-clip: text;
@@ -56,14 +70,16 @@
 
 .logoSubText {
   font-size: 0.9rem;
-  color: #888;
+  color: #aaa;
   letter-spacing: 1px;
 }
 
+/* Ссылки */
 .navLinks {
   display: flex;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .navLink {
@@ -71,110 +87,104 @@
   font-size: 1.1rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .navLink:hover {
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(255, 215, 0, 0.15);
   transform: translateY(-2px);
 }
 
 .vipLink {
   background: linear-gradient(to right, #ffd700, #ff6b6b);
   color: #1a0d0d;
-  padding: 0.7rem 1.5rem;
-  border-radius: 25px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
   font-weight: 600;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .vipLink:hover {
   transform: scale(1.05);
 }
 
-/* Основной контент */
+/* Контент */
 .mainContent {
   flex: 1;
-  padding: 3rem 0;
+  padding: 3rem 2rem;
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  width: 100%;
 }
 
-/* Герой-секция */
+/* Герой */
 .heroSection {
-  position: relative;
+  background: linear-gradient(45deg, rgba(26,13,13,0.95), rgba(44,18,18,0.95)), url('/pattern.png') center/cover;
+  padding: 5rem 2rem;
+  text-align: center;
+  border-radius: 20px;
   margin-bottom: 4rem;
-  padding: 4rem 0;
-  background: linear-gradient(45deg, rgba(26,13,13,0.9), rgba(44,18,18,0.9)),
-              url('/pattern.png');
-}
-
-.heroContent {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
 }
 
 .heroTitle {
-  font-size: 4rem;
+  font-size: 3.5rem;
+  line-height: 1.2;
   margin-bottom: 2rem;
-  line-height: 1.1;
-  text-align: center;
 }
 
 .heroTitleGlow {
   display: block;
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
 }
 
 .heroTitleAccent {
   color: #ffd700;
   display: block;
-  position: relative;
 }
 
 .heroStats {
   display: flex;
   justify-content: center;
-  gap: 4rem;
-  margin-top: 3rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .statItem {
-  text-align: center;
-  padding: 1.5rem 3rem;
-  background: rgba(255, 215, 0, 0.1);
-  border-radius: 15px;
+  background: rgba(255, 215, 0, 0.12);
+  padding: 1.5rem 2.5rem;
+  border-radius: 20px;
   border: 1px solid rgba(255, 215, 0, 0.3);
+  min-width: 180px;
 }
 
 .statValue {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: bold;
   color: #ffd700;
-  margin-bottom: 0.5rem;
 }
 
 .statLabel {
-  font-size: 1.1rem;
-  color: #aaa;
+  color: #ccc;
+  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 
-/* Секция с играми */
+/* Секция игр */
 .sectionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
-  padding: 0 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .sectionTitle {
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   color: #ffd700;
   position: relative;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
 }
 
 .sectionTitle::before {
@@ -182,57 +192,55 @@
   position: absolute;
   left: 0;
   top: 50%;
-  transform: translateY(-50%);
   width: 8px;
-  height: 80%;
+  height: 70%;
   background: #ff6b6b;
   border-radius: 4px;
+  transform: translateY(-50%);
 }
 
 .filterButtons {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .filterButtons button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
   background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 0.7rem 1.5rem;
   color: #fff;
-  transition: all 0.3s;
+  border: none;
+  transition: background 0.3s ease;
+  cursor: pointer;
 }
 
-.filterButtons button:hover {
+.filterButtons button:hover,
+.filterButtons .filterActive {
   background: #ffd700;
   color: #1a0d0d;
-}
-
-.filterActive {
-  background: #ffd700 !important;
-  color: #1a0d0d !important;
   font-weight: 600;
 }
 
-/* Карточки игр */
+/* Игры */
 .gamesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2.5rem;
-  padding: 0 2rem;
+  gap: 2rem;
 }
 
 .gameCard {
   background: #1f1010;
-  border-radius: 15px;
+  border-radius: 20px;
   overflow: hidden;
   position: relative;
   transition: transform 0.3s, box-shadow 0.3s;
-  border: 1px solid rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.15);
 }
 
 .gameCard:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .imageContainer {
@@ -243,7 +251,9 @@
 
 .gameImage {
   object-fit: cover;
-  transition: transform 0.3s;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
 }
 
 .gameCard:hover .gameImage {
@@ -252,16 +262,13 @@
 
 .gameOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
   opacity: 0;
   transition: opacity 0.3s;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .gameCard:hover .gameOverlay {
@@ -271,9 +278,9 @@
 .playButton {
   background: #ffd700;
   color: #1a0d0d;
-  padding: 1rem 2rem;
+  padding: 0.8rem 1.6rem;
   border-radius: 30px;
-  font-weight: 600;
+  font-weight: bold;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -284,66 +291,44 @@
   transform: scale(1.05);
 }
 
-.playIcon {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-.cardContent {
-  padding: 1.5rem;
-}
-
-.gameInfo {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-  color: #888;
-}
-
-.rating {
-  color: #ffd700;
-}
-
-.playersOnline {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
 /* Футер */
 .footer {
   background: #0d0606;
-  margin-top: auto;
-  padding: 4rem 0 2rem;
+  padding: 4rem 2rem 2rem;
 }
 
 .footerColumns {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 2rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
 }
 
 .footerColumn h4 {
   font-size: 1.3rem;
+  margin-bottom: 1rem;
   color: #ffd700;
-  margin-bottom: 1.5rem;
+}
+
+.footerColumn p, .footerList li, .footerBottom p {
+  color: #ccc;
+  font-size: 0.95rem;
 }
 
 .footerList {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .footerList li {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .footerList a {
   color: #aaa;
+  text-decoration: none;
   transition: color 0.3s;
 }
 
@@ -352,30 +337,21 @@
 }
 
 .footerBottom {
-  text-align: center;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 215, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
 }
 
-/* Адаптация для очень широких экранов */
-@media (min-width: 1600px) {
-  .gamesGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .heroTitle {
-    font-size: 5rem;
-  }
-  
-  .sectionTitle {
-    font-size: 3rem;
-  }
+.legalLinks a {
+  margin-left: 1rem;
+  color: #888;
 }
 
-/* Анимации */
-@keyframes gradientPulse {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.legalLinks a:hover {
+  color: #ffd700;
 }
