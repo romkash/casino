@@ -161,7 +161,7 @@ const CrashGame = () => {
             <motion.div 
               className="rocket"
               animate={{
-                y: `${100 - animationProgress * 100}%`, // Исправлено направление движения
+                y: `${100 - animationProgress * 100}%`, 
                 opacity: gameState === "crashed" ? 0 : 1
               }}
               transition={{ type: "spring", stiffness: 100 }}
@@ -202,7 +202,7 @@ const CrashGame = () => {
             </button>
             <button
               className={`cashout-button ${gameState !== "flying" ? 'disabled' : ''}`}
-              onClick={handleCashout} // Исправлено на handleCashout
+              onClick={handleCashout} 
             >
               ЗАБРАТЬ x{multiplier.toFixed(2)}
             </button>

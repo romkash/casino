@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -19,5 +19,7 @@ const db = getFirestore(app); // Правильная инициализация
 export { 
   auth,
   googleProvider,
-  db
+  db,
+  createUserWithEmailAndPassword,
+  signInWithPopup
 };

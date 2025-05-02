@@ -1,122 +1,202 @@
-/* Основные стили страницы */
-.register-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #1e1e2f, #3b3b58);
-  }
-  
-  /* Контейнер формы */
-  .register-box {
-    width: 100%;
-    max-width: 400px;
-    background: rgba(50, 50, 70, 0.9);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    border: 1px solid #555;
-  }
-  
-  /* Заголовок */
-  .register-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 15px;
-  }
-  
-  /* Поля ввода */
-  .register-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    background: #222;
-    border: 1px solid #444;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 16px;
-  }
-  
-  /* Кнопка */
-  .register-button {
-    width: 100%;
-    background: #0066ff;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .register-button:hover {
-    background: #0044cc;
-    transform: scale(1.05);
-  }
-  
-  /* Ссылка на вход */
-  .register-link {
-    margin-top: 10px;
-    display: block;
-    color: #00aaff;
-    font-size: 14px;
-    text-decoration: none;
-  }
-  
-  .register-link:hover {
-    text-decoration: underline;
-  }
-  .socialAuth {
-    margin: 2rem 0;
-    text-align: center;
-  }
-  
-  .socialDivider {
-    color: #aaa;
-    position: relative;
-    margin: 1.5rem 0;
-  }
-  
-  .socialDivider::before,
-  .socialDivider::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 40%;
-    height: 1px;
-    background: rgba(255, 215, 0, 0.3);
-  }
-  
-  .socialDivider::before {
-    left: 0;
-  }
-  
-  .socialDivider::after {
-    right: 0;
-  }
-  
-  .googleButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    width: 100%;
-    padding: 0.8rem;
-    border-radius: 8px;
-    background: #4285F4;
-    color: white;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .googleButton:hover {
-    background: #357ABD;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
+/* Auth.module.css */
+
+.authContainer {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1a0f0b 0%, #0a0604 100%);
+  position: relative;
+  overflow: auto
+}
+
+.authContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  background: url('/gold-texture.png') repeat;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.authCard {
+  background: rgba(10, 6, 4, 0.95);
+  padding: 3rem 4rem;
+  border-radius: 20px;
+  box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+  border: 2px solid #d4af37;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  height: 80%;
+  max-width: 350px;
+  max-height: auto;
+  overflow: auto
+}
+
+.authHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.logo {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 2.5rem;
+  color: #d4af37;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  margin: 1.5rem 0;
+  letter-spacing: 2px;
+  overflow: auto
+}
+
+.authTitle {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 100;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.authForm {
+  margin: 2rem 0;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.authInput {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #d5a576;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.authInput:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.authButton {
+  width: 100%;
+  padding: 1.2rem;
+  background: linear-gradient(45deg, #d4af37, #b8860b);
+  border: none;
+  border-radius: 8px;
+  color: #1a0f0b;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.authButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.socialAuth {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.socialDivider {
+  color: #d4af37;
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.socialDivider::before,
+.socialDivider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37);
+}
+
+.socialDivider::before {
+  left: 0;
+}
+
+.socialDivider::after {
+  right: 0;
+  background: linear-gradient(90deg, #d4af37, transparent);
+}
+
+.googleButton {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #443322;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.googleButton:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.googleButton img {
+  filter: brightness(0) invert(1);
+}
+
+.authFooter {
+  text-align: center;
+  color: #888;
+  margin-top: 1.5rem;
+}
+
+.authLink {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.authLink:hover {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.errorMessage {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px solid #ff4444;
+  text-align: center;
+  font-size: 0.9rem;
+}

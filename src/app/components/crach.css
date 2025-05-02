@@ -116,7 +116,7 @@
     bottom: 0;
     transform: translateX(-50%);
     font-size: 48px;
-    transition: transform 0.1s linear;
+    transition: transform 0.5s linear;
     will-change: transform;
   }
   
@@ -127,7 +127,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 30px;
-    height: 50px;
+    height: 70px;
     background: linear-gradient(180deg, #FF5722, #FF9800);
     border-radius: 50%;
     filter: blur(8px);
