@@ -1,234 +1,220 @@
 'use client';
-
 import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import './minesGame.css';
+import { toast } from 'react-hot-toast';
 
-const MINE = '💣';
-const DIAMOND = '💎';
-const INITIAL_BALANCE = 5000;
-const MIN_BET = 100;
-const MAX_MINES = 15;
+type GameResult = {
+  bet: number;
+  multiplier: number;
+  payout: number;
+  timestamp: number;
+  win: boolean;
+};
+
+const INITIAL_BALANCE = 1000;
+const MAX_HISTORY = 5;
+const GRID_SIZE = 25;
 
 const MinesGame = () => {
   const [balance, setBalance] = useState(INITIAL_BALANCE);
-  const [betAmount, setBetAmount] = useState(MIN_BET);
-  const [board, setBoard] = useState<(typeof MINE | typeof DIAMOND)[]>([]);
-  const [revealed, setRevealed] = useState<boolean[]>([]);
-  const [gameState, setGameState] = useState<'idle' | 'playing' | 'win' | 'lose'>('idle');
+  const [betAmount, setBetAmount] = useState(100);
+  const [minesCount, setMinesCount] = useState(3);
+  const [gameHistory, setGameHistory] = useState<GameResult[]>([]);
   const [multiplier, setMultiplier] = useState(1.0);
-  const [minesCount, setMinesCount] = useState(5);
-  const [riskLevel, setRiskLevel] = useState<'low' | 'medium' | 'high'>('medium');
+  const [board, setBoard] = useState<string[]>([]);
+  const [revealed, setRevealed] = useState<boolean[]>([]);
+  const [gameState, setGameState] = useState<'idle' | 'playing' | 'cashed'>('idle');
 
-  const multiplierFormula = {
-    low: 1.15,
-    medium: 1.25,
-    high: 1.4
+  // Загрузка из localStorage
+  useEffect(() => {
+    const savedBalance = localStorage.getItem('minesBalance');
+    const savedHistory = localStorage.getItem('minesHistory');
+    
+    if (savedBalance) setBalance(JSON.parse(savedBalance));
+    if (savedHistory) setGameHistory(JSON.parse(savedHistory));
+  }, []);
+
+  // Сохранение в localStorage
+  useEffect(() => {
+    localStorage.setItem('minesBalance', JSON.stringify(balance));
+    localStorage.setItem('minesHistory', JSON.stringify(gameHistory));
+  }, [balance, gameHistory]);
+
+  const calculateMultiplier = (openedCells: number) => {
+    const remainingCells = GRID_SIZE - minesCount - openedCells;
+    return remainingCells > 0 
+      ? Number((1.0 / (1 - minesCount / GRID_SIZE) ** openedCells).toFixed(2))
+      : 0;
   };
 
-  useEffect(() => {
-    if (gameState === 'lose') {
-      toast.error('Взрыв! Игра окончена', { 
-        icon: '💥',
-        style: {
-          background: '#450a0a',
-          color: '#fca5a5',
-          border: '1px solid #7f1d1d'
-        }
-      });
-    }
-  }, [gameState]);
-
   const generateBoard = () => {
-    const newBoard = Array(25).fill(DIAMOND);
-    const minePositions = new Set<number>();
-    
-    while (minePositions.size < minesCount) {
-      minePositions.add(Math.floor(Math.random() * 25));
+    const mines = new Set<number>();
+    while (mines.size < minesCount) {
+      mines.add(Math.floor(Math.random() * GRID_SIZE));
     }
-    
-    Array.from(minePositions).forEach(pos => newBoard[pos] = MINE);
-    return newBoard;
+    return Array(GRID_SIZE).fill('💎').map((_, i) => mines.has(i) ? '💣' : '💎');
   };
 
   const startGame = () => {
-    if (balance < betAmount) {
-      toast.error('Недостаточно средств', { 
-        style: {
-          background: '#450a0a',
-          color: '#fca5a5'
-        }
-      });
-      return;
-    }
-
-    setBalance(prev => prev - betAmount);
+    if (balance < betAmount) return toast.error('Недостаточно средств!');
+    
+    setBalance(b => b - betAmount);
     setGameState('playing');
-    setMultiplier(1.0);
-    setRevealed(Array(25).fill(false));
     setBoard(generateBoard());
+    setRevealed(Array(GRID_SIZE).fill(false));
+    setMultiplier(1.0);
   };
 
   const handleCellClick = (index: number) => {
-    if (revealed[index] || gameState !== 'playing') return;
+    if (gameState !== 'playing' || revealed[index]) return;
 
     const newRevealed = [...revealed];
     newRevealed[index] = true;
     setRevealed(newRevealed);
 
-    if (board[index] === MINE) {
-      setGameState('lose');
+    if (board[index] === '💣') {
+      endGame();
       return;
     }
 
-    const revealedCount = newRevealed.filter(Boolean).length;
-    const newMultiplier = multiplier + (multiplier * multiplierFormula[riskLevel]);
-    setMultiplier(Number(newMultiplier.toFixed(2)));
+    setMultiplier(calculateMultiplier(newRevealed.filter(Boolean).length));
   };
 
   const cashOut = () => {
     if (gameState !== 'playing') return;
     
-    const winAmount = Math.floor(betAmount * multiplier);
-    setBalance(prev => prev + winAmount);
-    setGameState('win');
+    const payout = betAmount * multiplier;
+    setGameHistory(prev => [
+      {
+        bet: betAmount,
+        multiplier,
+        payout,
+        timestamp: Date.now(),
+        win: true
+      },
+      ...prev
+    ].slice(0, MAX_HISTORY));
     
-    toast.success(`Вы забрали $${winAmount.toLocaleString()}!`, {
-      icon: '🎉',
-      style: {
-        background: '#052e16',
-        color: '#86efac',
-        border: '1px solid #14532d'
-      }
-    });
+    setBalance(b => b + payout);
+    setGameState('cashed');
+    setRevealed(Array(GRID_SIZE).fill(true));
   };
 
-  const getCellStyle = (index: number) => {
-    if (!revealed[index]) return 'cell';
-    if (board[index] === DIAMOND) return 'cell revealed diamond';
-    return 'cell revealed mine';
+  const endGame = () => {
+    setGameHistory(prev => [
+      {
+        bet: betAmount,
+        multiplier,
+        payout: 0,
+        timestamp: Date.now(),
+        win: false
+      },
+      ...prev
+    ].slice(0, MAX_HISTORY));
+    
+    setGameState('idle');
+    setRevealed(Array(GRID_SIZE).fill(true));
+    toast.error('Вы наткнулись на мину!');
   };
 
   return (
-    <div className="mines-game-container">
-      <div className="game-controls">
-        {/* Заголовок игры */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="game-title"
-        >
-          Diamond Mines
-        </motion.h1>
-
-        {/* Информация о балансе и ставке */}
-        <div className="balance-info">
-          <div>
-            <p className="label">Баланс</p>
-            <p>${balance.toLocaleString()}</p>
-          </div>
-          <div>
-            <p className="label">Ставка</p>
-            <input
-              type="number"
-              value={betAmount}
-              onChange={(e) => setBetAmount(Math.max(MIN_BET, Math.min(balance, Number(e.target.value))))}
-              className="bet-input"
-            />
-          </div>
-        </div>
-
-        {/* Игровое поле */}
-        <div className="game-board">
-          {board.map((_, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleCellClick(index)}
-              disabled={revealed[index] || gameState !== 'playing'}
-              className={getCellStyle(index)}
-            >
-              <AnimatePresence>
-                {revealed[index] && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="block"
-                  >
-                    {board[index]}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Информация о множителе и выигрыше */}
-        <div className="multiplier-info">
-          <div>
-            <p className="label">Множитель</p>
-            <p>x{multiplier.toFixed(2)}</p>
-          </div>
-          <div>
-            <p className="label">Выигрыш</p>
-            <p>${(betAmount * multiplier).toFixed(0)}</p>
+    <div className="mines-container">
+      <h1 className="title">CAVEMINES</h1>
+      
+      <div className="game-layout">
+        <div className="history-panel">
+          <h3>Последние игры</h3>
+          <div className="history-list">
+            {gameHistory.map((game, i) => (
+              <div 
+                key={i}
+                className={`history-item ${game.win ? 'win' : 'loss'}`}
+              >
+                <div className="result-icon">
+                  {game.win ? '🏆' : '💥'}
+                </div>
+                <div className="game-info">
+                  <span>Ставка: ${game.bet}</span>
+                  <span>Множитель: x{game.multiplier.toFixed(2)}</span>
+                  <span>Результат: {game.win ? `+$${game.payout}` : 'Проигрыш'}</span>
+                </div>
+                <div className="game-time">
+                  {new Date(game.timestamp).toLocaleTimeString()}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Управление игрой */}
-        <div className="controls">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            onClick={startGame}
-            disabled={balance < betAmount || gameState === 'playing'}
-            className="button"
-          >
-            {gameState === 'playing' ? 'Игра идет...' : 'Новая игра'}
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            onClick={cashOut}
-            disabled={gameState !== 'playing'}
-            className="button"
-          >
-            Забрать ${(betAmount * multiplier).toFixed(0)}
-          </motion.button>
-        </div>
+          <div className="game-board">
+            {board.map((cell, i) => (
+              <motion.button
+                key={i}
+                className={`cell ${revealed[i] ? 'revealed' : ''}`}
+                onClick={() => handleCellClick(i)}
+                disabled={gameState !== 'playing'}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <AnimatePresence>
+                  {revealed[i] && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    >
+                      {cell}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            ))}
+          </div>
 
-        {/* Настройки */}
-        <div className="settings">
-          <div className="flex items-center gap-2">
-            <span className="label">Количество мин:</span>
-            <input
-              type="range"
-              min="1"
-              max={MAX_MINES}
-              value={minesCount}
-              onChange={(e) => setMinesCount(Number(e.target.value))}
-              className="mines-slider"
-            />
-            <span>{minesCount}</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <span className="label">Риск:</span>
-            <select
-              value={riskLevel}
-              onChange={(e) => setRiskLevel(e.target.value as typeof riskLevel)}
-              className="risk-select"
-            >
-              <option value="low">Консервативный (x1.15)</option>
-              <option value="medium">Стандартный (x1.25)</option>
-              <option value="high">Агрессивный (x1.40)</option>
-            </select>
+          <div className="controls">
+            <div className="input-group">
+              <label>Ставка:</label>
+              <input
+                type="number"
+                value={betAmount}
+                onChange={(e) => setBetAmount(Math.max(1, Math.min(1000, Number(e.target.value))))}
+                min="1"
+                max="1000"
+              />
+            </div>
+            
+            <div className="input-group">
+              <label>Ловушки: {minesCount}</label>
+              <input
+                type="range"
+                min="1"
+                max="15"
+                value={minesCount}
+                onChange={(e) => setMinesCount(Number(e.target.value))}
+              />
+            </div>
+
+            <div className="actions">
+              <button
+                onClick={startGame}
+                disabled={gameState === 'playing'}
+                className={`play-button ${gameState === 'playing' ? 'disabled' : ''}`}
+              >
+                {gameState === 'playing' ? 'Идет игра...' : 'Начать игру'}
+              </button>
+              
+              <button
+                onClick={cashOut}
+                disabled={gameState !== 'playing'}
+                className={`cashout-button ${gameState !== 'playing' ? 'disabled' : ''}`}
+              >
+                Забрать ${(betAmount * multiplier).toFixed(0)}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> 
   );
-};
-
+}
 export default MinesGame;
